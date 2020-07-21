@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import TodoList from './components/TodoList';
 
 function App() {
+  const [todos, setTodos] = useState([
+    {id: 1, title: 'title 1'},
+    {id: 2, title: 'title 2'},
+    {id: 3, title: 'title 3'},
+  ])
+  function handleClickTodo (todo) {
+    let todoIndex = todos.findIndex(x => x.id == todo.id);
+    if (todoIndex < 0) return ;
+    const newTodo = [...todos];
+    newTodo.splice(todoIndex, 1);
+    setTodos(newTodo);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TodoList todos={todos} onClickTodo={handleClickTodo}/>
     </div>
   );
 }
