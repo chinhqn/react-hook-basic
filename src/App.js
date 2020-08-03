@@ -5,6 +5,8 @@ import TodoForm from './components/todoForm';
 import PostList from './components/postList';
 import Pagination from './components/pagination';
 import queryString from 'query-string';
+import PostFilterForm from './components/postFilterForm';
+import Clock from './components/clock';
 function App() {
   const [todos, setTodos] = useState([
     {id: 1, title: 'title 1'},
@@ -19,8 +21,11 @@ function App() {
   })
   const [filter, setFilter] = useState({
     _limit: 10,
-    _page: 1
+    _page: 1,
+    title_like: '',
   })
+
+  const [oclockStatus, setOclockStatus] = useState(true)
   function handleClickTodo (todo) {
     let todoIndex = todos.findIndex(x => x.id == todo.id);
     if (todoIndex < 0) return ;
@@ -74,12 +79,27 @@ function App() {
     console.log('use2');
   })
   
+  function handleSearchTerm(value) {
+    setFilter({
+      ...filter,
+      _page: 1,
+      title_like: value.searchTerms,
+    })
+  }
+
+  function hideClock() {
+    setOclockStatus(false)
+  }
   return (
     <div className="App">
+
+      <PostFilterForm onSubmit={handleSearchTerm} />
       <PostList postList={postList} />
       <Pagination pagination={pagination} 
         onPageChange={handleNewPageChange}
       />
+      {oclockStatus ? <Clock /> : ''}
+      <button onClick={hideClock}>hide clock</button>
       {/* <TodoForm onSubmit={handleChangeSubmit} />
       <TodoList todos={todos} onClickTodo={handleClickTodo}/> */}
     </div>
